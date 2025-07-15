@@ -30,7 +30,7 @@ struct CMIcon: View {
       Image(image)
         .renderingMode(.template)
         .resizable()
-        .foregroundColor(imageColor)
+        .foregroundStyle(imageColor)
         .scaledToFit()
     }
     .frame(width: width, height: height)

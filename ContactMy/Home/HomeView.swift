@@ -17,10 +17,14 @@ struct HomeView: View {
           .font(.title)
           .fontWeight(.medium)
         Spacer()
-        CMIcon(
-          .systemAdd,
-          color: .azure
-        )
+        Button {
+          
+        } label: {
+          CMIcon(
+            .systemAdd,
+            color: .azure
+          )
+        }
       }
       SearchContact(searchText: searchText, label: "Search contact...")
       
