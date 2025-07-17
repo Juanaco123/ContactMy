@@ -12,5 +12,5 @@ struct Contact: Identifiable {
   let id: UUID = UUID()
   let name: String
   let phoneNumber: [PhoneNumber]
-  let photo: Image
+  let photo: Image?
 }

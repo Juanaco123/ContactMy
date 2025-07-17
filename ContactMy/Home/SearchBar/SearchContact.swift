@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SearchContact: View {
-  @State var searchText: String = ""
+  @Binding var searchText: String
   var label: String
   
   init(
-    searchText: String,
+    searchText: Binding<String>,
     label: String = ""
   ) {
-    self.searchText = searchText
+    self._searchText = searchText
     self.label = label
   }
   
@@ -36,5 +36,5 @@ struct SearchContact: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-  SearchContact(searchText: "", label: "Search contact...")
+  SearchContact(searchText: .constant(""), label: "Search contact...")
 }

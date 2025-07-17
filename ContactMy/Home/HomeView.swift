@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct HomeView: View {
-  @State private var searchText: String = ""
+  @State private var viewModel: HomeViewModel = HomeViewModel()
   @State private var isShowAddContact: Bool = false
   
   var body: some View {
@@ -28,13 +28,31 @@ struct HomeView: View {
           )
         }
       }
-      SearchContact(searchText: searchText, label: "Search contact...")
+      .applyDefaultPadding()
+      
+      SearchContact(
+        searchText: $viewModel.searchText,
+        label: Constants.Home.searchPlaceholder.rawValue
+      )
+        .padding(.horizontal, .space4x)
       
       List {
-        
+        ForEach(viewModel.filteredContactByName) { contact in
+          VStack(spacing: .zero) {
+            ContactCard(
+              name: contact.name,
+              phone: contact.phoneNumber[0].number
+            ) {
+            }
+            Divider()
+              .padding(.top, .space2x)
+          }
+          .listRowSeparator(.hidden)
+        }
       }
+      .listStyle(.plain)
     }
-    .applyDefaultPadding()
+    
     .adaptiveSheet(isPresent: $isShowAddContact) {
       AddContactView()
     }
