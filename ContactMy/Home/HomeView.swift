@@ -10,6 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
   @State private var searchText: String = ""
+  @State private var isShowAddContact: Bool = false
+  
   var body: some View {
     VStack {
       HStack {
@@ -18,7 +20,7 @@ struct HomeView: View {
           .fontWeight(.medium)
         Spacer()
         Button {
-          
+          isShowAddContact.toggle()
         } label: {
           CMIcon(
             .systemAdd,
@@ -33,6 +35,9 @@ struct HomeView: View {
       }
     }
     .applyDefaultPadding()
+    .adaptiveSheet(isPresent: $isShowAddContact) {
+      AddContactView()
+    }
   }
 }
 

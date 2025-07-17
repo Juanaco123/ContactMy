@@ -25,7 +25,7 @@ struct AddContactView: View {
         VStack {
           // Name
           HStack {
-            Text("Name")
+            Text(Constants.AddContact.nameSubtitle.rawValue)
             TextField("", text: .constant("Juan Camilo Victoria"))
               .padding(.leading, .space2x)
               .padding(.vertical, .space2x)
@@ -38,7 +38,7 @@ struct AddContactView: View {
           
           // Phone
           HStack(alignment: .top) {
-            Text("Phone")
+            Text(Constants.AddContact.phoneSubtitle.rawValue)
             
             VStack(alignment: .leading) {
               
@@ -68,7 +68,7 @@ struct AddContactView: View {
               } label: {
                 HStack {
                   CMIcon(.systemPlusCircle, color: .erin)
-                  Text("Add phone")
+                  Text(Constants.AddContact.buttonAddPhone.rawValue)
                     .foregroundStyle(.azure)
                   Spacer()
                 }
@@ -85,6 +85,7 @@ struct AddContactView: View {
       }
       .background(.platinum)
       .clipShape(.rect(cornerRadius: .radius5))
+      .padding(.top, .space6x)
     }
     .applyDefaultPadding()
   }
