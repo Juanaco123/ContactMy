@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PhoneNumber: Identifiable {
+struct PhoneNumberModel: Identifiable {
   let id: UUID = UUID()
   let tag: String
   let number: String

@@ -9,32 +9,32 @@ import Foundation
 
 @Observable
 class HomeViewModel {
-  var contacts: [Contact] = [
-    Contact(
+  var contacts: [ContactModel] = [
+    ContactModel(
       name: "Contact1",
       phoneNumber: [
-        PhoneNumber(tag: "Personal", number: "+1 (123)4678967")
+        PhoneNumberModel(tag: "Personal", number: "+1 (123)4678967")
       ],
       photo: nil
     ),
-    Contact(
+    ContactModel(
       name: "Contact2",
       phoneNumber: [
-        PhoneNumber(tag: "Personal", number: "+1 (123)4678967")
+        PhoneNumberModel(tag: "Personal", number: "+1 (123)4678967")
       ],
       photo: nil
     ),
-    Contact(
+    ContactModel(
       name: "Contact3",
       phoneNumber: [
-        PhoneNumber(tag: "Personal", number: "+1 (123)4678967")
+        PhoneNumberModel(tag: "Personal", number: "+1 (123)4678967")
       ],
       photo: nil
     ),
   ]
   var searchText: String = ""
   
-  var filteredContactByName: [Contact] {
+  var filteredContactByName: [ContactModel] {
     guard !searchText.isEmpty else { return contacts }
     return contacts.filter { contact in
       contact.name.lowercased().contains(searchText.lowercased())

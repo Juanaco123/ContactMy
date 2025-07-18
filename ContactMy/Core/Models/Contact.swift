@@ -8,9 +8,9 @@
 import Foundation
 import SwiftUICore
 
-struct Contact: Identifiable {
+struct ContactModel: Identifiable {
   let id: UUID = UUID()
-  let name: String
-  let phoneNumber: [PhoneNumber]
-  let photo: Image?
+  var name: String
+  var phoneNumber: [PhoneNumberModel]
+  var photo: Image?
 }
