@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct AddContactView: View {
+  @State private var viewModel: AddContactViewModel = AddContactViewModel()
   
   var body: some View {
     VStack {
@@ -26,45 +27,28 @@ struct AddContactView: View {
           // Name
           HStack {
             Text(Constants.AddContact.nameSubtitle.rawValue)
-            TextField("", text: .constant("Juan Camilo Victoria"))
-              .padding(.leading, .space2x)
-              .padding(.vertical, .space2x)
-              .background(.milk)
-              .clipShape(.rect(cornerRadius: .radius10))
+            nameField
           }
           .padding(.bottom, .space1x)
+          .keyboardType(.default)
           
           Divider()
           
           // Phone
           HStack(alignment: .top) {
             Text(Constants.AddContact.phoneSubtitle.rawValue)
-            
             VStack(alignment: .leading) {
-              
-              HStack {
-                Button {} label: {
-                  HStack {
-                    CMIcon(.systemErase, color: .scarlet)
-                  }
+              ForEach($viewModel.phoneNumberFields) { $field in
+                Field(
+                  text: $field.text,
+                  placeholder: field.placeholder
+                ) {
+                  removePhoneField(with: field.id)
                 }
-                
-                Button {} label: {
-                  HStack {
-                    Text("Personal")
-                      .foregroundStyle(.azure)
-                    CMIcon(.systemChevronRight)
-                  }
-                }
-                TextField("", text: .constant("112324564"))
               }
-              .padding(.leading, .space2x)
-              .padding(.vertical, .space2x)
-              .background(.milk)
-              .clipShape(.rect(cornerRadius: .radius10))
               
               Button{
-                
+                addNewPhoneField()
               } label: {
                 HStack {
                   CMIcon(.systemPlusCircle, color: .erin)
@@ -79,6 +63,7 @@ struct AddContactView: View {
                 .clipShape(.rect(cornerRadius: .radius10))
               }
             }
+            .keyboardType(.numberPad)
           }
         }
         .padding(.space2x)
@@ -88,6 +73,29 @@ struct AddContactView: View {
       .padding(.top, .space6x)
     }
     .applyDefaultPadding()
+  }
+  
+  @ViewBuilder
+  private var nameField: some View {
+    TextField(Constants.AddContact.addNamePlaceholder.rawValue, text: $viewModel.contactName)
+      .padding(.leading, .space2x)
+      .padding(.vertical, .space2x)
+      .background(.milk)
+      .clipShape(.rect(cornerRadius: .radius10))
+  }
+  
+  func addNewPhoneField() {
+    let newField: PhoneFieldModel = PhoneFieldModel(
+      text: "",
+      placeholder: Constants.AddContact.addNumberPlaceholder.rawValue
+    )
+    viewModel.phoneNumberFields.append(newField)
+  }
+  
+  func removePhoneField(with id: UUID) {
+    viewModel.phoneNumberFields.removeAll { phoneField in
+      phoneField.id == id
+    }
   }
 }
 

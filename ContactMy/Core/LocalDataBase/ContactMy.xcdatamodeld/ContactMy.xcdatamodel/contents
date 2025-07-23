@@ -4,12 +4,12 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="photo" optional="YES" attributeType="Binary"/>
-        <relationship name="phoneNumber" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhoneNumber" inverseName="contactNumber" inverseEntity="PhoneNumber"/>
+        <relationship name="phoneNumber" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="PhoneNumber" inverseName="contact" inverseEntity="PhoneNumber"/>
     </entity>
     <entity name="PhoneNumber" representedClassName="PhoneNumber" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="number" optional="YES" attributeType="String"/>
         <attribute name="tag" optional="YES" attributeType="String"/>
-        <relationship name="contactNumber" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Contact" inverseName="phoneNumber" inverseEntity="Contact"/>
+        <relationship name="contact" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Contact" inverseName="phoneNumber" inverseEntity="Contact"/>
     </entity>
 </model>

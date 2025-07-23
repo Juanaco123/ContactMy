@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct HomeView: View {
-  @State private var viewModel: HomeViewModel = HomeViewModel()
+  @State var viewModel: HomeViewModel = HomeViewModel()
   @State private var isShowAddContact: Bool = false
   
   var body: some View {
@@ -34,7 +34,7 @@ struct HomeView: View {
         searchText: $viewModel.searchText,
         label: Constants.Home.searchPlaceholder.rawValue
       )
-        .padding(.horizontal, .space4x)
+      .padding(.horizontal, .space4x)
       
       List {
         ForEach(viewModel.filteredContactByName) { contact in
@@ -52,7 +52,6 @@ struct HomeView: View {
       }
       .listStyle(.plain)
     }
-    
     .adaptiveSheet(isPresent: $isShowAddContact) {
       AddContactView()
     }

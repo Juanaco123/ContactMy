@@ -9,6 +9,6 @@ import Foundation
 
 struct PhoneNumberModel: Identifiable {
   let id: UUID = UUID()
-  let tag: String
-  let number: String
+  var tag: String
+  var number: String
 }

@@ -62,13 +62,16 @@ struct ContactService {
   
   func createContact(_ contactModel: ContactModel) {
     let newContact: Contact = Contact(context: context)
+    newContact.id = contactModel.id
     newContact.name = contactModel.name
     newContact.photo = contactModel.photo?.transformAsData()
     
     for phoneNumber in contactModel.phoneNumber {
-      let phoneNumber: PhoneNumber = PhoneNumber(context: context)
-      phoneNumber.tag = phoneNumber.tag
-      phoneNumber.number = phoneNumber.number
+      let newPhoneNumber: PhoneNumber = PhoneNumber(context: context)
+      newPhoneNumber.id = phoneNumber.id
+      newPhoneNumber.tag = phoneNumber.tag
+      newPhoneNumber.number = phoneNumber.number
+      newContact.addToPhoneNumber(newPhoneNumber)
     }
     saveContext()
   }

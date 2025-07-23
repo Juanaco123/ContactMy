@@ -25,6 +25,8 @@ public enum Constants {
   enum AddContact: String {
     case cancel = "Cancel"
     case add = "Add"
+    case addNamePlaceholder = "Add a name here..."
+    case addNumberPlaceholder = "Add a number here..."
     case nameSubtitle = "Name"
     case phoneSubtitle = "Phone"
     case buttonAddPhone = "Add phone"
