@@ -10,16 +10,13 @@ import SwiftUI
 struct Field: View {
   @Binding var text: String
   
-  var placeholder: String
   var action: () -> Void = {}
   
   init(
     text: Binding<String>,
-    placeholder: String,
     action: @escaping () -> Void = {},
   ) {
     self._text = text
-    self.placeholder = placeholder
     self.action = action
   }
   
@@ -36,7 +33,10 @@ struct Field: View {
         
         TagSelectorView()
         
-        TextField(placeholder, text: $text)
+        TextField(
+          Constants.AddContact.addNumberPlaceholder.rawValue,
+          text: $text
+        )
       }
       .padding(.leading, .space2x)
       .padding(.vertical, .space2x)
@@ -47,5 +47,5 @@ struct Field: View {
 }
 
 #Preview {
-  Field(text: .constant(""), placeholder: Constants.AddContact.addNumberPlaceholder.rawValue) {}
+  Field(text: .constant("")) {}
 }

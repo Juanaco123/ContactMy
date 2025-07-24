@@ -10,16 +10,21 @@ import PhotosUI
 
 struct AddContactView: View {
   @State private var viewModel: AddContactViewModel = AddContactViewModel()
+  @Environment(\.dismiss) private var dismiss
   
   var body: some View {
     VStack {
       HStack {
-        Button("Cancel") {}
+        Button(Constants.AddContact.cancel.rawValue) {
+          dismiss()
+        }
         Spacer()
-        Button("Add") {}
+        Button(Constants.AddContact.add.rawValue) {
+          viewModel.addContact()
+        }
       }
       // Photo
-      ContactPhotoView()
+      ContactPhotoView(selectedImage: viewModel.selectedPhoto)
       
       VStack(alignment: .leading) {
         
@@ -40,15 +45,14 @@ struct AddContactView: View {
             VStack(alignment: .leading) {
               ForEach($viewModel.phoneNumberFields) { $field in
                 Field(
-                  text: $field.text,
-                  placeholder: field.placeholder
+                  text: $field.number
                 ) {
-                  removePhoneField(with: field.id)
+                  viewModel.removePhoneField(with: field.id)
                 }
               }
               
               Button{
-                addNewPhoneField()
+                viewModel.addNewPhoneField()
               } label: {
                 HStack {
                   CMIcon(.systemPlusCircle, color: .erin)
@@ -77,25 +81,14 @@ struct AddContactView: View {
   
   @ViewBuilder
   private var nameField: some View {
-    TextField(Constants.AddContact.addNamePlaceholder.rawValue, text: $viewModel.contactName)
+    TextField(
+      Constants.AddContact.addNamePlaceholder.rawValue,
+      text: $viewModel.contactName
+    )
       .padding(.leading, .space2x)
       .padding(.vertical, .space2x)
       .background(.milk)
       .clipShape(.rect(cornerRadius: .radius10))
-  }
-  
-  func addNewPhoneField() {
-    let newField: PhoneFieldModel = PhoneFieldModel(
-      text: "",
-      placeholder: Constants.AddContact.addNumberPlaceholder.rawValue
-    )
-    viewModel.phoneNumberFields.append(newField)
-  }
-  
-  func removePhoneField(with id: UUID) {
-    viewModel.phoneNumberFields.removeAll { phoneField in
-      phoneField.id == id
-    }
   }
 }
 

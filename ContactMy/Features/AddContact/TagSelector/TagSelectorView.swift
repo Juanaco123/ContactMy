@@ -11,8 +11,6 @@ import Foundation
 struct TagSelectorView: View {
   @State private var viewModel: AddContactViewModel = AddContactViewModel()
   
-//  var onTagSelected: (Tags) -> Void = {_ in}
-  
   var body: some View {
     Menu {
       Picker("Tags", selection: $viewModel.selectedTagNumber) {

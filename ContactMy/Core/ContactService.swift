@@ -38,7 +38,15 @@ struct ContactService {
       
       let contactModel: [ContactModel] = fetchedContact.map { contact in
         let name: String? = contact.name ?? ""
-        let photo = contact.photo ?? Data()
+        
+        var photo: Image {
+          if let imageData = contact.photo,
+             let uiImage = UIImage(data: imageData) {
+            return Image(uiImage: uiImage)
+          } else {
+            return Image(systemName: "person.crop.circle")
+          }
+        }
         let phone: [PhoneNumberModel] = ([contact.phoneNumber] as? [PhoneNumber])?.map { phoneNumber in
           PhoneNumberModel(
             tag: phoneNumber.tag ?? "",
@@ -49,7 +57,7 @@ struct ContactService {
         return ContactModel(
           name: name!,
           phoneNumber: phone,
-          photo: Image(uiImage: UIImage(data: photo)!)
+          photo: photo
         )
       }
       
@@ -71,7 +79,6 @@ struct ContactService {
       newPhoneNumber.id = phoneNumber.id
       newPhoneNumber.tag = phoneNumber.tag
       newPhoneNumber.number = phoneNumber.number
-      newContact.addToPhoneNumber(newPhoneNumber)
     }
     saveContext()
   }

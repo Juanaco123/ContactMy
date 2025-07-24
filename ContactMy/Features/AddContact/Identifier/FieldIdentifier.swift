@@ -1,5 +1,5 @@
 //
-//  PhoneFieldModel.swift
+//  FieldIdentifier.swift
 //  ContactMy
 //
 //  Created by Juan Camilo Victoria Pacheco on 23/07/25.
@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct PhoneFieldModel: Identifiable {
+struct FieldIdentifier: Identifiable {
   var id: UUID = UUID()
-  var text: String
-  var placeholder: String
+  var number: String = ""
 }

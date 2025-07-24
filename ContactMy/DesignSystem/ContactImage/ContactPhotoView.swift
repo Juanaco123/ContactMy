@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct ContactPhotoView: View {
+  @State var selectedImage: Image?
   @StateObject private var photoSelector: PhotoSelector = PhotoSelector()
   
   // MARK: - Constant
@@ -22,6 +23,9 @@ struct ContactPhotoView: View {
           .scaledToFill()
           .clipShape(.circle)
           .frame(width: size, height: size)
+          .onChange(of: photo) { _, newValue in
+            selectedImage = Image(uiImage: newValue)
+          }
       } else {
         Circle()
           .fill(.metal)

@@ -15,7 +15,7 @@ struct HomeView: View {
   var body: some View {
     VStack {
       HStack {
-        Text("Contact My")
+        Text(Constants.Home.title.rawValue)
           .font(.title)
           .fontWeight(.medium)
         Spacer()
