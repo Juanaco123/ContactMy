@@ -17,6 +17,7 @@ struct ContactService {
   // MARK: - Constants
   private let persistenceContainer: String = "ContactMy"
   private let entityName: String = "Contact"
+  private let entityRelationship: String = "PhoneNumber"
   
   init(inMemory: Bool = false) {
     container = NSPersistentContainer(name: persistenceContainer)
@@ -33,11 +34,12 @@ struct ContactService {
   
   func fetchContacts() -> [ContactModel] {
     let request = NSFetchRequest<Contact>(entityName: entityName)
+    request.relationshipKeyPathsForPrefetching = [entityRelationship]
+    
     do {
       let fetchedContact = try context.fetch(request)
       
       let contactModel: [ContactModel] = fetchedContact.map { contact in
-        let name: String? = contact.name ?? ""
         
         var photo: Image {
           if let imageData = contact.photo,
@@ -47,15 +49,15 @@ struct ContactService {
             return Image(systemName: "person.crop.circle")
           }
         }
-        let phone: [PhoneNumberModel] = ([contact.phoneNumber] as? [PhoneNumber])?.map { phoneNumber in
+        let phone: [PhoneNumberModel] = contact.phoneNumberArray.map { phoneNumber in
           PhoneNumberModel(
             tag: phoneNumber.tag ?? "",
             number: phoneNumber.number ?? ""
           )
-        } ?? []
+        }
         
         return ContactModel(
-          name: name!,
+          name: contact.wrappedName,
           phoneNumber: phone,
           photo: photo
         )
@@ -79,6 +81,7 @@ struct ContactService {
       newPhoneNumber.id = phoneNumber.id
       newPhoneNumber.tag = phoneNumber.tag
       newPhoneNumber.number = phoneNumber.number
+      newContact.addToPhoneNumber(newPhoneNumber)
     }
     saveContext()
   }

@@ -44,9 +44,7 @@ struct AddContactView: View {
             Text(Constants.AddContact.phoneSubtitle.rawValue)
             VStack(alignment: .leading) {
               ForEach($viewModel.phoneNumberFields) { $field in
-                Field(
-                  text: $field.number
-                ) {
+                Field(text: $field.number) {
                   viewModel.removePhoneField(with: field.id)
                 }
               }
