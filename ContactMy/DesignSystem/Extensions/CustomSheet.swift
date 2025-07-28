@@ -7,40 +7,58 @@
 
 import SwiftUI
 
-extension View {
-  func adaptiveSheet<Content: View>(isPresent: Binding<Bool>, @ViewBuilder sheetContent: () -> Content) -> some View {
-    modifier(AdaptativeSheetModifier(isPresent: isPresent, sheetContent))
+
+private struct HeighPreferenceKey: PreferenceKey {
+  static var defaultValue: CGFloat = 0.0
+  static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+    value = max(value, nextValue())
   }
 }
 
-struct AdaptativeSheetModifier<SheetContent: View>: ViewModifier {
-  @Binding var isPresent: Bool
-  @State private var subHeight: CGFloat = .zero
-  var sheetContent: SheetContent
+extension View {
+  func adaptiveSheet<Content: View>(
+    isPresented: Binding<Bool>,
+    onDismiss: (() -> Void)? = nil,
+    @ViewBuilder sheetContent: @escaping () -> Content
+  ) -> some View {
+    sheet(isPresented: isPresented, onDismiss: { onDismiss?() }) {
+      AdaptativeSheet(
+        onDismiss: { onDismiss?() },
+        sheetContent: sheetContent
+      )
+    }
+  }
+}
+
+struct AdaptativeSheet<SheetContent: View>: View {
+  @Environment(\.dismiss) private var dismiss
+  @State private var contentHeight: CGFloat = .zero
   
-  init(isPresent: Binding<Bool>, @ViewBuilder _ content: () -> SheetContent) {
-    _isPresent = isPresent
-    sheetContent = content()
+  private let onDismiss: () -> Void
+  private let sheetContent: SheetContent
+  
+  init(
+    onDismiss: @escaping () -> Void,
+    @ViewBuilder sheetContent: () -> SheetContent,
+  ) {
+    self.onDismiss = onDismiss
+    self.sheetContent = sheetContent()
   }
   
-  func body(content: Content) -> some View {
-    content
-      .background {
-        sheetContent
-          .background {
-            GeometryReader { proxy in
-              Color.clear
-                .task(id: proxy.size.height) {
-                  subHeight = proxy.size.height
-                }
-            }
-          }
-          .hidden()
+  var body: some View {
+    VStack {
+      sheetContent
+    }
+    .background {
+      GeometryReader { proxy in
+        Color.clear
+          .preference(key: HeighPreferenceKey.self, value: proxy.size.height)
       }
-      .sheet(isPresented: $isPresent) {
-        sheetContent
-          .presentationDetents([.height(subHeight)])
-      }
-      .id(subHeight)
+    }
+    .onPreferenceChange(HeighPreferenceKey.self) { newHeight in
+      contentHeight = newHeight
+    }
+    .presentationDetents([.height(contentHeight)])
+    .onDisappear(perform: onDismiss)
   }
 }

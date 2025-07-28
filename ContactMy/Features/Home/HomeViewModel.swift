@@ -9,13 +9,19 @@ import Foundation
 
 @Observable
 class HomeViewModel {
-  var service: ContactService = .shared
+  private var service: ContactService = .shared
+  private var contacts: [ContactModel] = []
+  
   var searchText: String = ""
   
   var filteredContactByName: [ContactModel] {
-    guard !searchText.isEmpty else { return service.fetchContacts() }
-    return service.fetchContacts().filter { contact in
+    guard !searchText.isEmpty else { return contacts }
+    return contacts.filter { contact in
       contact.name.lowercased().contains(searchText.lowercased())
     }
+  }
+  
+  func updateView() {
+    contacts = service.fetchContacts()
   }
 }

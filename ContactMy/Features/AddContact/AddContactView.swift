@@ -12,6 +12,12 @@ struct AddContactView: View {
   @State private var viewModel: AddContactViewModel = AddContactViewModel()
   @Environment(\.dismiss) private var dismiss
   
+  var onAddContact: () -> Void
+  
+  init(onAddContact: @escaping () -> Void = {}) {
+    self.onAddContact = onAddContact
+  }
+  
   var body: some View {
     VStack {
       HStack {
@@ -21,6 +27,8 @@ struct AddContactView: View {
         Spacer()
         Button(Constants.AddContact.add.rawValue) {
           viewModel.addContact()
+          onAddContact()
+          dismiss()
         }
       }
       // Photo

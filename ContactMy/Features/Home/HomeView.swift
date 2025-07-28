@@ -12,6 +12,10 @@ struct HomeView: View {
   @State var viewModel: HomeViewModel = HomeViewModel()
   @State private var isShowAddContact: Bool = false
   
+  init() {
+    viewModel.updateView()
+  }
+  
   var body: some View {
     VStack {
       HStack {
@@ -42,8 +46,7 @@ struct HomeView: View {
             ContactCard(
               name: contact.name,
               phone: contact.phoneNumber[0].number
-            ) {
-            }
+            ) {}
             Divider()
               .padding(.top, .space2x)
           }
@@ -52,8 +55,12 @@ struct HomeView: View {
       }
       .listStyle(.plain)
     }
-    .adaptiveSheet(isPresent: $isShowAddContact) {
-      AddContactView()
+    .adaptiveSheet(isPresented: $isShowAddContact) {
+      AddContactView() {
+        withAnimation {
+          viewModel.updateView()
+        }
+      }
     }
   }
 }

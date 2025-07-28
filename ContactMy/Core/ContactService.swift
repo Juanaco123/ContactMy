@@ -49,6 +49,7 @@ struct ContactService {
             return Image(systemName: "person.crop.circle")
           }
         }
+        
         let phone: [PhoneNumberModel] = contact.phoneNumberArray.map { phoneNumber in
           PhoneNumberModel(
             tag: phoneNumber.tag ?? "",
