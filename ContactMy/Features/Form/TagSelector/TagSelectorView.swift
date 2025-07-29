@@ -10,21 +10,19 @@ import Foundation
 
 struct TagSelectorView: View {
   @State private var viewModel: ContactFormViewModel = ContactFormViewModel()
+  @Binding var tag: Tags
   
   var body: some View {
     Menu {
-      Picker("Tags", selection: $viewModel.selectedTagNumber) {
+      Picker("Tags", selection: $tag) {
         ForEach(Tags.allCases) { tag in
           Text(tag.rawValue)
             .tag(tag.id)
-            .onTapGesture {
-              viewModel.selectedTagNumber = tag
-            }
         }
       }
     } label: {
       HStack(spacing: .zero) {
-        Text(viewModel.selectedTagNumber.rawValue)
+        Text(tag.rawValue)
           .foregroundStyle(.azure)
         CMIcon(.systemChevronRight)
       }
@@ -33,5 +31,5 @@ struct TagSelectorView: View {
 }
 
 #Preview {
-  TagSelectorView()
+  TagSelectorView(tag: .constant(.personal))
 }

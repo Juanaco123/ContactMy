@@ -1,5 +1,5 @@
 //
-//  Field.swift
+//  PhoneNumberField.swift
 //  ContactMy
 //
 //  Created by Juan Camilo Victoria Pacheco on 22/07/25.
@@ -7,15 +7,18 @@
 
 import SwiftUI
 
-struct Field: View {
+struct PhoneNumberField: View {
   @Binding var text: String
+  @Binding var tag: Tags
   
   var action: () -> Void = {}
   
   init(
+    tag: Binding<Tags>,
     text: Binding<String>,
     action: @escaping () -> Void = {},
   ) {
+    self._tag = tag
     self._text = text
     self.action = action
   }
@@ -31,7 +34,7 @@ struct Field: View {
           }
         }
         
-        TagSelectorView()
+        TagSelectorView(tag: $tag)
         
         TextField(
           Constants.AddContact.addNumberPlaceholder.rawValue,
@@ -47,5 +50,9 @@ struct Field: View {
 }
 
 #Preview {
-  Field(text: .constant("")) {}
+  PhoneNumberField(
+    tag: .constant(.personal),
+    text: .constant("")
+  ) {
+  }
 }

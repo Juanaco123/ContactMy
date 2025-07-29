@@ -8,6 +8,13 @@
 import SwiftUI
 import Foundation
 
+struct FieldArg: Identifiable {
+  var id: UUID = UUID()
+  var number: String = ""
+  var tag: Tags = .personal
+}
+
+
 @MainActor
 @Observable
 class ContactFormViewModel {
@@ -16,8 +23,7 @@ class ContactFormViewModel {
   var isUpdateContact: Bool = false
   var contactName: String = ""
   var selectedPhoto: UIImage? = nil
-  var selectedTagNumber: Tags = .personal
-  var phoneNumberFields: [FieldIdentifier] = []
+  var phoneNumberFields: [FieldArg] = []
   
   func addContact() {
     let phoneNumbers: [PhoneNumberModel] = addPhoneNumber()
@@ -32,7 +38,7 @@ class ContactFormViewModel {
   }
   
   func addNewPhoneField() {
-    let newField: FieldIdentifier = FieldIdentifier()
+    let newField: FieldArg = FieldArg()
     phoneNumberFields.append(newField)
   }
   
@@ -47,7 +53,7 @@ class ContactFormViewModel {
     phoneNumberFields.forEach { field in
       phoneNumbers.append(
         PhoneNumberModel(
-          tag: selectedTagNumber.rawValue,
+          tag: field.tag.rawValue,
           number: field.number
         )
       )
