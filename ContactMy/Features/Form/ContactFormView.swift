@@ -8,29 +8,34 @@
 import SwiftUI
 import PhotosUI
 
-struct ContactFormView: View {
-  @State private var viewModel: ContactFormViewModel = ContactFormViewModel()
+struct ContactFormView: SheetView {
   @Environment(\.dismiss) private var dismiss
+  @State private var viewModel: ContactFormViewModel = ContactFormViewModel()
+  @State private var isEditing: Bool = false
   
   var onAddContact: () -> Void
+  
+  var sheetScreenConfiguration: SheetScreenConfiguration {
+    SheetScreenConfiguration(
+      leadingText: Constants.AddContact.cancel.rawValue,
+      trailingText: isEditing ? Constants.EditContact.done.rawValue : Constants.AddContact.add.rawValue,
+      leadingAction: { dismiss() },
+      trailingAction: {
+        if !isEditing {
+          viewModel.addContact()
+          onAddContact()
+        }
+        dismiss()
+      }
+    )
+  }
   
   init(onAddContact: @escaping () -> Void = {}) {
     self.onAddContact = onAddContact
   }
   
-  var body: some View {
+  var content: some View {
     VStack {
-      HStack {
-        Button(Constants.AddContact.cancel.rawValue) {
-          dismiss()
-        }
-        Spacer()
-        Button(Constants.AddContact.add.rawValue) {
-          viewModel.addContact()
-          onAddContact()
-          dismiss()
-        }
-      }
       // Photo
       ContactPhotoView(selectedImage: $viewModel.selectedPhoto)
       
@@ -84,6 +89,13 @@ struct ContactFormView: View {
       .background(.platinum)
       .clipShape(.rect(cornerRadius: .radius5))
       .padding(.top, .space6x)
+      
+      if isEditing {
+        VStack {
+          deleteContactButton() {}
+        }
+        .padding(.top, .space8x)
+      }
     }
     .applyDefaultPadding()
   }
@@ -98,6 +110,22 @@ struct ContactFormView: View {
       .padding(.vertical, .space2x)
       .background(.milk)
       .clipShape(.rect(cornerRadius: .radius10))
+  }
+  
+  @ViewBuilder
+  private func deleteContactButton(_ action: @escaping () -> Void) -> some View {
+    Button {
+      action()
+    } label: {
+      VStack(alignment: .center) {
+        Text(Constants.EditContact.buttonLabel.rawValue)
+          .foregroundStyle(Color.scarlet)
+      }
+      .padding(.vertical, .space3x)
+      .frame(maxWidth: .infinity)
+      .background(Color.metal)
+      .clipShape(.rect(cornerRadius: .radius5))
+    }
   }
 }
 
