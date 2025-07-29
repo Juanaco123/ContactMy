@@ -8,12 +8,14 @@
 import SwiftUI
 import Foundation
 
+@MainActor
 @Observable
-class AddContactViewModel {
+class ContactFormViewModel {
   private var service: ContactService = .shared
   
+  var isUpdateContact: Bool = false
   var contactName: String = ""
-  var selectedPhoto: Image? = nil
+  var selectedPhoto: UIImage? = nil
   var selectedTagNumber: Tags = .personal
   var phoneNumberFields: [FieldIdentifier] = []
   

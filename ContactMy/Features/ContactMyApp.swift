@@ -9,10 +9,12 @@ import SwiftUI
 
 @main
 struct ContactMyApp: App {
-
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  let persistenceContainer = ContactService.shared
+  
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .environment(\.managedObjectContext, persistenceContainer.container.viewContext)
     }
+  }
 }

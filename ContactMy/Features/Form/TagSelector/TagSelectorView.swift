@@ -9,7 +9,7 @@ import SwiftUI
 import Foundation
 
 struct TagSelectorView: View {
-  @State private var viewModel: AddContactViewModel = AddContactViewModel()
+  @State private var viewModel: ContactFormViewModel = ContactFormViewModel()
   
   var body: some View {
     Menu {

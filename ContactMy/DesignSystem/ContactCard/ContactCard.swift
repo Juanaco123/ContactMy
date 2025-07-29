@@ -10,7 +10,7 @@ import SwiftUI
 struct ContactCard: View {
   var name: String
   var phone: String
-  var image: Image?
+  var photo: Image?
   var action: () -> Void
   
   private let size: CGFloat = 40.0
@@ -18,12 +18,12 @@ struct ContactCard: View {
   init(
     name: String,
     phone: String,
-    image: Image? = nil,
+    photo: Image? = nil,
     action: @escaping () -> Void,
   ) {
     self.name = name
     self.phone = phone
-    self.image = image
+    self.photo = photo
     self.action = action
   }
   
@@ -34,13 +34,21 @@ struct ContactCard: View {
     label: {
       HStack {
         // Photo
-        if let _ = image {
+        ZStack {
+          if let photo = photo {
+            photo
+              .resizable()
+              .scaledToFill()
+              .clipShape(.circle)
+              .frame(width: size * 1.5, height: size)
+          }
           
-        } else {
-          Circle()
-            .fill(.metal)
-            .frame(width: size, height: size)
-            .padding(.trailing, .space1x)
+          if photo == Image(uiImage: UIImage()) {
+            Circle()
+              .fill(.metal)
+              .frame(width: size, height: size)
+              .padding(.trailing, .space1x)
+          }
         }
         VStack(alignment: .leading, spacing: .space1x) {
           Text(name)
@@ -61,5 +69,7 @@ struct ContactCard: View {
 #Preview(traits: .sizeThatFitsLayout) {
   ContactCard(
     name: "Juan Camilo Victoria",
-    phone: "+1 (123)4678967") {}
+    phone: "+1 (123)4678967",
+    photo: Image(.systemCamera))
+  {}
 }

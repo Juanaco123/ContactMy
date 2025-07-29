@@ -9,8 +9,12 @@ import SwiftUI
 import PhotosUI
 
 struct ContactPhotoView: View {
-  @State var selectedImage: Image?
+  @Binding var selectedImage: UIImage?
   @StateObject private var photoSelector: PhotoSelector = PhotoSelector()
+  
+  private var wrapSelectedImage: UIImage {
+    photoSelector.selectedImage ?? UIImage()
+  }
   
   // MARK: - Constant
   private let size: CGFloat = 142.0
@@ -23,9 +27,6 @@ struct ContactPhotoView: View {
           .scaledToFill()
           .clipShape(.circle)
           .frame(width: size, height: size)
-          .onChange(of: photo) { _, newValue in
-            selectedImage = Image(uiImage: newValue)
-          }
       } else {
         Circle()
           .fill(.metal)
@@ -45,9 +46,12 @@ struct ContactPhotoView: View {
           }
       }
     }
+    .onChange(of: wrapSelectedImage) { _, newValue in
+      selectedImage = newValue
+    }
   }
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-  ContactPhotoView()
+  ContactPhotoView(selectedImage: .constant(UIImage()))
 }

@@ -45,7 +45,8 @@ struct HomeView: View {
           VStack(spacing: .zero) {
             ContactCard(
               name: contact.name,
-              phone: contact.phoneNumber[0].number
+              phone: contact.phoneNumber[0].number,
+              photo: Image(uiImage: contact.wrapPhoto)
             ) {}
             Divider()
               .padding(.top, .space2x)
@@ -56,7 +57,7 @@ struct HomeView: View {
       .listStyle(.plain)
     }
     .adaptiveSheet(isPresented: $isShowAddContact) {
-      AddContactView() {
+      ContactFormView() {
         withAnimation {
           viewModel.updateView()
         }

@@ -8,8 +8,8 @@
 import SwiftUI
 import PhotosUI
 
-struct AddContactView: View {
-  @State private var viewModel: AddContactViewModel = AddContactViewModel()
+struct ContactFormView: View {
+  @State private var viewModel: ContactFormViewModel = ContactFormViewModel()
   @Environment(\.dismiss) private var dismiss
   
   var onAddContact: () -> Void
@@ -32,7 +32,7 @@ struct AddContactView: View {
         }
       }
       // Photo
-      ContactPhotoView(selectedImage: viewModel.selectedPhoto)
+      ContactPhotoView(selectedImage: $viewModel.selectedPhoto)
       
       VStack(alignment: .leading) {
         
@@ -99,5 +99,5 @@ struct AddContactView: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-  AddContactView()
+  ContactFormView()
 }

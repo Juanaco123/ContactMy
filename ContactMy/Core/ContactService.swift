@@ -41,12 +41,12 @@ struct ContactService {
       
       let contactModel: [ContactModel] = fetchedContact.map { contact in
         
-        var photo: Image {
-          if let imageData = contact.photo,
-             let uiImage = UIImage(data: imageData) {
-            return Image(uiImage: uiImage)
+        var photo: UIImage {
+          let imageData = contact.wrappedphoto
+          if let uiImage = UIImage(data: imageData) {
+            return uiImage
           } else {
-            return Image(systemName: "person.crop.circle")
+            return UIImage()
           }
         }
         
@@ -75,7 +75,7 @@ struct ContactService {
     let newContact: Contact = Contact(context: context)
     newContact.id = contactModel.id
     newContact.name = contactModel.name
-    newContact.photo = contactModel.photo?.transformAsData()
+    newContact.photo = contactModel.photo?.jpegData(compressionQuality: 0.7)
     
     for phoneNumber in contactModel.phoneNumber {
       let newPhoneNumber: PhoneNumber = PhoneNumber(context: context)
