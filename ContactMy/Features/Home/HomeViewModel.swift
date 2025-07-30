@@ -13,6 +13,7 @@ class HomeViewModel {
   private var contacts: [ContactModel] = []
   
   var searchText: String = ""
+  var selectedContact: ContactModel?
   
   var filteredContactByName: [ContactModel] {
     guard !searchText.isEmpty else { return contacts }

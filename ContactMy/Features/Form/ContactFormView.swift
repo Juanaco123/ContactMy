@@ -17,14 +17,14 @@ struct ContactFormView: SheetView {
   
   var sheetScreenConfiguration: SheetScreenConfiguration {
     SheetScreenConfiguration(
+      fullSheet: false,
       leadingText: Constants.AddContact.cancel.rawValue,
       trailingText: isEditing ? Constants.EditContact.done.rawValue : Constants.AddContact.add.rawValue,
       leadingAction: { dismiss() },
       trailingAction: {
-        if !isEditing {
-          viewModel.addContact()
-          onAddContact()
-        }
+        if isEditing {}
+        viewModel.addContact()
+        onAddContact()
         dismiss()
       }
     )

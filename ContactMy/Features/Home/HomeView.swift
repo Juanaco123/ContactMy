@@ -10,7 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
   @State var viewModel: HomeViewModel = HomeViewModel()
-  @State private var isShowAddContact: Bool = false
+  @State private var showAddContact: Bool = false
+  @State private var showContactInfo: Bool = false
   
   init() {
     viewModel.updateView()
@@ -24,7 +25,7 @@ struct HomeView: View {
           .fontWeight(.medium)
         Spacer()
         Button {
-          isShowAddContact.toggle()
+          showAddContact.toggle()
         } label: {
           CMIcon(
             .systemAdd,
@@ -47,7 +48,10 @@ struct HomeView: View {
               name: contact.name,
               phone: contact.phoneNumber[0].number,
               photo: Image(uiImage: contact.wrapPhoto)
-            ) {}
+            ) {
+              viewModel.selectedContact = contact
+              showContactInfo.toggle()
+            }
             Divider()
               .padding(.top, .space2x)
           }
@@ -56,11 +60,16 @@ struct HomeView: View {
       }
       .listStyle(.plain)
     }
-    .adaptiveSheet(isPresented: $isShowAddContact) {
+    .adaptiveSheet(isPresented: $showAddContact) {
       ContactFormView() {
         withAnimation {
           viewModel.updateView()
         }
+      }
+    }
+    .sheet(isPresented: $showContactInfo) {
+      if let contact = viewModel.selectedContact {
+        ContactInfoView(contact)
       }
     }
   }

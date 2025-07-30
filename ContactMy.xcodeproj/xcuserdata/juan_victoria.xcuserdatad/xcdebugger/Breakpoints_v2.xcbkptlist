@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BBE7F7CB-EB0F-450A-8AA6-D60C9D9124A1"
-            shouldBeEnabled = "Yes"
+            uuid = "8CD0AD12-E9FE-47A3-BDE5-B7CADBD6E8C3"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ContactMy/Core/ContactService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "createContact(_:)"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "fetchContacts()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -14,6 +14,7 @@ struct ContactMyApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
+        .preferredColorScheme(.light)
         .environment(\.managedObjectContext, persistenceContainer.container.viewContext)
     }
   }

@@ -15,17 +15,20 @@ private struct SheetHeighPreferenceKey: PreferenceKey {
 }
 
 struct SheetScreenConfiguration {
+  var fullSheet: Bool = false
   var leadingText: String
   var trailingText: String
   var leadingAction: () -> Void
   var trailingAction: () -> Void
   
   init(
+    fullSheet: Bool = false,
     leadingText: String,
     trailingText: String,
     leadingAction: @escaping () -> Void = {},
     trailingAction: @escaping () -> Void = {},
   ) {
+    self.fullSheet = fullSheet
     self.leadingText = leadingText
     self.trailingText = trailingText
     self.leadingAction = leadingAction
@@ -60,12 +63,17 @@ struct SheetViewContent<Content: View>: View {
         leadingText: sheetScreenConfiguration.leadingText,
         trailingText: sheetScreenConfiguration.trailingText,
         leadingAction: { sheetScreenConfiguration.leadingAction() },
-        trailingAction: { sheetScreenConfiguration.leadingAction() }
+        trailingAction: { sheetScreenConfiguration.trailingAction() }
       )
       .zIndex(1)
       
-      content()
-        .frame(maxWidth: .infinity)
+      if sheetScreenConfiguration.fullSheet {
+        content()
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+      } else {
+        content()
+          .frame(maxWidth: .infinity)
+      }
     }
   }
 }
