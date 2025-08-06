@@ -13,7 +13,7 @@ struct ContactCard: View {
   var photo: Image?
   var action: () -> Void
   
-  private let size: CGFloat = 40.0
+  private let size: CGFloat = 60.0
   
   init(
     name: String,
@@ -40,7 +40,7 @@ struct ContactCard: View {
               .resizable()
               .scaledToFill()
               .clipShape(.circle)
-              .frame(width: size * 1.5, height: size)
+              .frame(width: size, height: size)
           }
           
           if photo == Image(uiImage: UIImage()) {

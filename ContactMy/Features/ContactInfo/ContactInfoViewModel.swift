@@ -5,6 +5,7 @@
 //  Created by Juan Camilo Victoria Pacheco on 30/07/25.
 //
 
+import UIKit
 import Foundation
 
 @Observable
@@ -15,13 +16,14 @@ class ContactInfoViewModel {
     self.contact = contact
   }
   
-  func onCall(to phone: String) -> URL? {
-    let phoneNumberFormat: String = phone.replacingOccurrences(of: " ", with: "")
-    let phone: String = "tel://\(phoneNumberFormat)"
-    guard let phoneUrl: URL = URL(string: phone) else {
-      print("❌ Number unreachable")
-      return nil
+  func call(to phoneNumber: String) {
+    if let phoneURL = URL(string: "tel://\(formatPhone(phoneNumber))") {
+      UIApplication.shared.open(phoneURL)
     }
-    return phoneUrl
+  }
+  
+  private func formatPhone(_ phone: String) -> String {
+    let formattedPhone = phone.replacingOccurrences(of: " ", with: "")
+    return formattedPhone
   }
 }

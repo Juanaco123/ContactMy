@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ContactInfoView: SheetView {
   @State private var viewModel: ContactInfoViewModel = ContactInfoViewModel()
+  @State private var showNumberList: Bool = false
+  
+  @Environment(\.dismiss) private var dismiss
   
   private let contact: ContactModel?
   private let size: CGFloat = 142.0
@@ -46,7 +49,7 @@ struct ContactInfoView: SheetView {
         
         HStack {
           IconButton(icon: .systemMessage) {}
-          IconButton(icon: .systemPhone) {}
+          IconButton(icon: .systemPhone) { showNumberList.toggle() }
           IconButton(icon: .systemShare) {}
         }
         .padding(.top, .space2x)
@@ -73,7 +76,7 @@ struct ContactInfoView: SheetView {
       
       VStack(spacing: .space4x) {
         actionButton(Constants.ShowContactInfo.linkMessage.rawValue) {}
-        actionButton(Constants.ShowContactInfo.linkCall.rawValue) {}
+        actionButton(Constants.ShowContactInfo.linkCall.rawValue) { showNumberList.toggle() }
         actionButton(Constants.ShowContactInfo.linkShare.rawValue) {}
         actionButton(Constants.ShowContactInfo.linkFavorite.rawValue) {}
       }
@@ -87,6 +90,9 @@ struct ContactInfoView: SheetView {
       Spacer()
     }
     .applyDefaultPadding()
+    .adaptativeSheet(isPresented: $showNumberList, noBackground: true) {
+      numberList
+    }
   }
   
   @ViewBuilder
@@ -95,14 +101,12 @@ struct ContactInfoView: SheetView {
       VStack(alignment: .leading, spacing: .space1x) {
         Text(tag)
           .fontWeight(.medium)
-        if let destination = viewModel.onCall(to: phone) {
-          Link(destination: destination) {
-            Text(phone)
-              .fontWeight(.regular)
-          }
-        } else {
-          Text("❌ Number unreachable")
-            .foregroundStyle(.scarlet)
+        Button {
+          viewModel.call(to: phone)
+        } label: {
+          Text(phone)
+            .fontWeight(.regular)
+            .foregroundStyle(.azure)
         }
       }
       Spacer()
@@ -110,10 +114,7 @@ struct ContactInfoView: SheetView {
   }
   
   @ViewBuilder
-  private func actionButton(
-    _ label: String,
-    action: @escaping () -> Void
-  ) -> some View {
+  private func actionButton(_ label: String, action: @escaping () -> Void) -> some View {
     HStack {
       VStack {
         Button {
@@ -124,6 +125,51 @@ struct ContactInfoView: SheetView {
         }
       }
       Spacer()
+    }
+  }
+  
+  @ViewBuilder
+  private var numberList: some View {
+    if let phones = viewModel.contact?.phoneNumber {
+      VStack {
+        ForEach(phones) { phone in
+          VStack(spacing: .space4x) {
+            Button {
+              viewModel.call(to: phone.number)
+            } label: {
+              HStack(spacing: .space2x) {
+                CMIcon(.systemPhone)
+                Text("Call \(phone.number)")
+                Spacer()
+              }
+              .foregroundStyle(.azure)
+              .padding(.vertical, .space4x)
+              .padding(.horizontal, .space4x)
+              .frame(maxWidth: .infinity)
+              .background(.milk)
+            }
+            .buttonStyle(.plain)
+            .clipShape(.rect(cornerRadius: .radius10))
+            .padding(.horizontal, .space2x)
+          }
+        }
+        
+        Button {
+          dismiss()
+        } label: {
+          VStack(alignment: .center) {
+            Text("Cancel")
+              .font(.headline)
+              .foregroundStyle(.scarlet)
+          }
+          .padding(.vertical, .space4x)
+          .frame(maxWidth: .infinity)
+          .background(.metal)
+          .clipShape(.rect(cornerRadius: .radius10))
+          .padding(.horizontal, .space2x)
+          .padding(.vertical, .space4x)
+        }
+      }
     }
   }
 }

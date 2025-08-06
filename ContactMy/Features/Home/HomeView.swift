@@ -60,7 +60,7 @@ struct HomeView: View {
       }
       .listStyle(.plain)
     }
-    .adaptiveSheet(isPresented: $showAddContact) {
+    .adaptativeSheet(isPresented: $showAddContact) {
       ContactFormView() {
         withAnimation {
           viewModel.updateView()

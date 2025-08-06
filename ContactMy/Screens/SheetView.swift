@@ -18,14 +18,14 @@ struct SheetScreenConfiguration {
   var fullSheet: Bool = false
   var leadingText: String
   var trailingText: String
-  var leadingAction: () -> Void
+  var leadingAction: (() -> Void)?
   var trailingAction: () -> Void
   
   init(
     fullSheet: Bool = false,
     leadingText: String,
     trailingText: String,
-    leadingAction: @escaping () -> Void = {},
+    leadingAction: (() -> Void)? = nil,
     trailingAction: @escaping () -> Void = {},
   ) {
     self.fullSheet = fullSheet
@@ -52,6 +52,7 @@ extension SheetView {
 }
 
 struct SheetViewContent<Content: View>: View {
+  @Environment(\.dismiss) private var dismiss
   var sheetScreenConfiguration: SheetScreenConfiguration
   var content: () -> Content
   
@@ -62,7 +63,13 @@ struct SheetViewContent<Content: View>: View {
       NavBar(
         leadingText: sheetScreenConfiguration.leadingText,
         trailingText: sheetScreenConfiguration.trailingText,
-        leadingAction: { sheetScreenConfiguration.leadingAction() },
+        leadingAction: {
+          if let leadingAction = sheetScreenConfiguration.leadingAction {
+            leadingAction()
+          } else {
+            dismiss()
+          }
+        },
         trailingAction: { sheetScreenConfiguration.trailingAction() }
       )
       .zIndex(1)
