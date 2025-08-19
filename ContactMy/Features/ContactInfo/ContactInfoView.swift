@@ -15,6 +15,7 @@ struct ContactInfoView: SheetView {
   
   private let contact: ContactModel?
   private let size: CGFloat = 142.0
+  private let minimumPhoneNumber: Int = 1
   
   var sheetScreenConfiguration: SheetScreenConfiguration {
     SheetScreenConfiguration(
@@ -49,8 +50,29 @@ struct ContactInfoView: SheetView {
         
         HStack {
           IconButton(icon: .systemMessage) {}
-          IconButton(icon: .systemPhone) { showNumberList.toggle() }
-          IconButton(icon: .systemShare) {}
+          IconButton(icon: .systemPhone) {
+            if let phoneNumbersCount = viewModel.contact?.phoneNumber.count, phoneNumbersCount > minimumPhoneNumber {
+              showNumberList.toggle()
+              
+            } else {
+              viewModel.call(to: viewModel.contact?.phoneNumber[0].number ?? "")
+            }
+          }
+          
+          ShareLink(
+            item: viewModel.shareContact(),
+            preview:
+              SharePreview(
+                viewModel.contact?.name ?? "",
+                image: Image(uiImage: viewModel.contact?.photo ?? UIImage()))
+          ) {
+            CMIcon(.systemShare)
+              .padding(.horizontal, .space4x)
+              .padding(.vertical, .space1x)
+              .background(Color.platinum)
+              .clipShape(.rect(cornerRadius: .radius10))
+          }
+          
         }
         .padding(.top, .space2x)
       }
