@@ -49,7 +49,7 @@ struct ContactInfoView: SheetView {
           .padding(.top, .space4x)
         
         HStack {
-          IconButton(icon: .systemMessage) {}
+          IconButton(icon: .systemMessage) { viewModel.textContact() }
           IconButton(icon: .systemPhone) {
             if let phoneNumbersCount = viewModel.contact?.phoneNumber.count, phoneNumbersCount > minimumPhoneNumber {
               showNumberList.toggle()

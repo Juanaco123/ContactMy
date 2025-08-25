@@ -8,7 +8,6 @@
 import UIKit
 import Contacts
 import Foundation
-import UniformTypeIdentifiers
 
 @Observable
 class ContactInfoViewModel {
@@ -38,11 +37,32 @@ class ContactInfoViewModel {
     }
   }
   
+  func textContact() {
+    let defaultMessage: String = "Hello \(contact?.name ?? "")!"
+    
+    if let phone = contact?.phoneNumber.first?.number {
+      let cleanedPhone = phone.replacingOccurrences(of: " ", with: "")
+      let urlWhatsApp: String = "https://wa.me/\(cleanedPhone)?text=\(defaultMessage)"
+      
+      if let urlString = urlWhatsApp.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+        
+        if let url = URL(string: urlString) {
+          if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+          } else {
+            print("Cannot Open WhatsApp")
+          }
+        }
+        
+      }
+    }
+  }
+  
   func shareContact() -> URL {
     let contact = contactToShare
     do {
       let vCardData: Data = try CNContactVCardSerialization.data(with: [contact])
-      let fileName: String = "\(contact.givenName).vcf"
+      let fileName: String = "\(contact.givenName)"
       let temporaryDirectory: URL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName, conformingTo: .vCard)
       
       try vCardData.write(to: temporaryDirectory, options: .atomic)

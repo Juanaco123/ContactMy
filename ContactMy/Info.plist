@@ -6,5 +6,9 @@
 	<false/>
 	<key>NSContactsUsageDescription</key>
 	<string>We need to access to your contacts to share.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+	</array>
 </dict>
 </plist>
