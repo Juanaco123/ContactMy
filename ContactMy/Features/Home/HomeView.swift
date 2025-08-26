@@ -61,15 +61,19 @@ struct HomeView: View {
       .listStyle(.plain)
     }
     .adaptativeSheet(isPresented: $showAddContact) {
-      ContactFormView() {
+      ContactFormView(onAddContact: {
         withAnimation {
           viewModel.updateView()
         }
-      }
+      })
     }
     .sheet(isPresented: $showContactInfo) {
       if let contact = viewModel.selectedContact {
-        ContactInfoView(contact)
+        ContactInfoView(contact, onDeleteContact: {
+          withAnimation {
+            viewModel.updateView()
+          }
+        })
       }
     }
   }

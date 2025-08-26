@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-struct PhoneNumberdArg: Identifiable {
+struct PhoneNumberArg: Identifiable {
   var id: UUID = UUID()
   var number: String = ""
   var tag: Tags = .personal
@@ -20,10 +20,24 @@ struct PhoneNumberdArg: Identifiable {
 class ContactFormViewModel {
   private var service: ContactService = .shared
   
-  var isUpdateContact: Bool = false
+  var contact: ContactModel? = nil
   var contactName: String = ""
   var selectedPhoto: UIImage? = nil
-  var phoneNumberFields: [PhoneNumberdArg] = []
+  var phoneNumberFields: [PhoneNumberArg] = []
+  
+  init(_ contact: ContactModel? = nil) {
+    if let contact = contact {
+      self.contact = contact
+      
+      contact.phoneNumber.forEach { phone in
+        self.phoneNumberFields.append(PhoneNumberArg(
+          number: phone.number,
+          tag: Tags(rawValue: phone.tag) ?? Tags.personal
+        ))
+      }
+      
+    }
+  }
   
   func addContact() {
     let phoneNumbers: [PhoneNumberModel] = addPhoneNumber()
@@ -37,8 +51,17 @@ class ContactFormViewModel {
     service.createContact(newContact)
   }
   
+  func deleteContact() {
+    guard let contact = contact else { return }
+    service.deleteContact(contact)
+    self.contact = nil
+    contactName = ""
+    selectedPhoto = nil
+    phoneNumberFields = []
+  }
+  
   func addNewPhoneField() {
-    let newField: PhoneNumberdArg = PhoneNumberdArg()
+    let newField: PhoneNumberArg = PhoneNumberArg()
     phoneNumberFields.append(newField)
   }
   

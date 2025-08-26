@@ -13,7 +13,10 @@ struct ContactFormView: SheetView {
   @State private var viewModel: ContactFormViewModel = ContactFormViewModel()
   @State private var isEditing: Bool = false
   
+  private let size: CGFloat = 142.0
+  
   var onAddContact: () -> Void
+  var onDeleteContact: () -> Void = {}
   
   var sheetScreenConfiguration: SheetScreenConfiguration {
     SheetScreenConfiguration(
@@ -21,7 +24,10 @@ struct ContactFormView: SheetView {
       leadingText: Constants.AddContact.cancel.rawValue,
       trailingText: isEditing ? Constants.EditContact.done.rawValue : Constants.AddContact.add.rawValue,
       trailingAction: {
-        if isEditing {}
+        if isEditing {
+          // TODO: Add update contact function
+          dismiss()
+        }
         viewModel.addContact()
         onAddContact()
         dismiss()
@@ -29,14 +35,30 @@ struct ContactFormView: SheetView {
     )
   }
   
-  init(onAddContact: @escaping () -> Void = {}) {
+  init(
+    contact: ContactModel? = nil,
+    isEditing: Bool = false,
+    onAddContact: @escaping () -> Void = {},
+    onDeleteContact: @escaping () -> Void = {},
+  ) {
+    self.isEditing = isEditing
     self.onAddContact = onAddContact
+    _viewModel = State(initialValue: ContactFormViewModel(contact))
+    self.onDeleteContact = onDeleteContact
   }
   
   var content: some View {
     VStack {
       // Photo
-      ContactPhotoView(selectedImage: $viewModel.selectedPhoto)
+      if isEditing {
+        Image(uiImage: viewModel.contact?.photo ?? UIImage())
+          .resizable()
+          .scaledToFit()
+          .clipShape(.circle)
+          .frame(width: size, height: size)
+      } else {
+        ContactPhotoView(selectedImage: $viewModel.selectedPhoto)
+      }
       
       VStack(alignment: .leading) {
         
@@ -91,7 +113,11 @@ struct ContactFormView: SheetView {
       
       if isEditing {
         VStack {
-          deleteContactButton() {}
+          deleteContactButton() {
+            viewModel.deleteContact()
+            onDeleteContact()
+            dismiss()
+          }
         }
         .padding(.top, .space8x)
       }
@@ -103,7 +129,11 @@ struct ContactFormView: SheetView {
   private var nameField: some View {
     TextField(
       Constants.AddContact.addNamePlaceholder.rawValue,
-      text: $viewModel.contactName
+      text: isEditing
+      ? Binding(
+        get: { viewModel.contact?.name ?? "" },
+        set: { viewModel.contact?.name = $0 })
+      : $viewModel.contactName
     )
       .padding(.leading, .space2x)
       .padding(.vertical, .space2x)
@@ -129,5 +159,12 @@ struct ContactFormView: SheetView {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-  ContactFormView()
+  ContactFormView(
+    contact: ContactModel(
+      name: "Juan",
+      phoneNumber: [
+        PhoneNumberModel(tag: "", number: "12345")
+      ]
+    )
+  )
 }

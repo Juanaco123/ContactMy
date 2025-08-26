@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct ContactInfoView: SheetView {
+  @Environment(\.dismiss) private var dismiss
   @State private var viewModel: ContactInfoViewModel = ContactInfoViewModel()
   @State private var showNumberList: Bool = false
+  @State private var showEditView: Bool = false
   
-  @Environment(\.dismiss) private var dismiss
+  var onDeleteContact: () -> Void = {}
   
   private let contact: ContactModel?
   private let size: CGFloat = 142.0
@@ -21,12 +23,15 @@ struct ContactInfoView: SheetView {
     SheetScreenConfiguration(
       fullSheet: true,
       leadingText: Constants.ShowContactInfo.close.rawValue,
-      trailingText: Constants.ShowContactInfo.edit.rawValue
-    )
+      trailingText: Constants.ShowContactInfo.edit.rawValue,
+      trailingAction:  {
+        showEditView.toggle()
+      })
   }
   
-  init(_ contact: ContactModel) {
+  init(_ contact: ContactModel, onDeleteContact: @escaping () -> Void = {}) {
     self.contact = contact
+    self.onDeleteContact = onDeleteContact
     _viewModel = State(initialValue: ContactInfoViewModel(contact))
   }
   
@@ -97,9 +102,23 @@ struct ContactInfoView: SheetView {
       .padding(.top, .space6x)
       
       VStack(spacing: .space4x) {
-        actionButton(Constants.ShowContactInfo.linkMessage.rawValue) {}
+        actionButton(Constants.ShowContactInfo.linkMessage.rawValue) { viewModel.textContact() }
         actionButton(Constants.ShowContactInfo.linkCall.rawValue) { showNumberList.toggle() }
-        actionButton(Constants.ShowContactInfo.linkShare.rawValue) {}
+        
+        ShareLink(
+          item: viewModel.shareContact(),
+          preview:
+            SharePreview(
+              viewModel.contact?.name ?? "",
+              image: Image(uiImage: viewModel.contact?.photo ?? UIImage()))
+        ) {
+          HStack {
+            Text(Constants.ShowContactInfo.linkShare.rawValue)
+              .foregroundStyle(.azure)
+            
+            Spacer()
+          }
+        }
         actionButton(Constants.ShowContactInfo.linkFavorite.rawValue) {}
       }
       .padding(.vertical, .space2x)
@@ -114,6 +133,15 @@ struct ContactInfoView: SheetView {
     .applyDefaultPadding()
     .adaptativeSheet(isPresented: $showNumberList, noBackground: true) {
       numberList
+    }
+    .adaptativeSheet(isPresented: $showEditView) {
+      ContactFormView(
+        contact: viewModel.contact,
+        isEditing: true,
+        onDeleteContact: {
+          onDeleteContact()
+          dismiss()
+        })
     }
   }
   

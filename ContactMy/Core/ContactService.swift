@@ -14,6 +14,7 @@ struct ContactService {
   let container: NSPersistentContainer
   
   private var context: NSManagedObjectContext { container.viewContext }
+  
   // MARK: - Constants
   private let persistenceContainer: String = "ContactMy"
   private let entityName: String = "Contact"
@@ -58,6 +59,7 @@ struct ContactService {
         }
         
         return ContactModel(
+          id: contact.id ?? UUID(),
           name: contact.wrappedName,
           phoneNumber: phone,
           photo: photo
@@ -66,7 +68,7 @@ struct ContactService {
       
       return contactModel
     } catch {
-      print("🛑 Failed to fetch contacts: \(error)")
+      print("Failed to fetch contacts: \(error)")
       return []
     }
   }
@@ -87,11 +89,25 @@ struct ContactService {
     saveContext()
   }
   
+  func deleteContact(_ contactModel: ContactModel) {
+    let request: NSFetchRequest<Contact> = Contact.fetchRequest()
+    request.predicate = NSPredicate(format: "id == %@", contactModel.id as CVarArg)
+    
+    do {
+      if let contact = try context.fetch(request).first {
+        context.delete(contact)
+        saveContext()
+      }
+    } catch {
+      print("Failed, contact could not be deleted: \(error)")
+    }
+  }
+  
   func saveContext() {
     do {
       try context.save()
     } catch {
-      print("🛑 Failed to save context: \(error)")
+      print("Failed to save context: \(error)")
     }
   }
   
