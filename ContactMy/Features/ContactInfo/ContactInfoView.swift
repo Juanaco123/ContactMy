@@ -44,17 +44,12 @@ struct ContactInfoView: SheetView {
   var content: some View {
     VStack {
       VStack {
-        if let photo = viewModel.contact?.photo {
-          Image(uiImage: photo)
-            .resizable()
-            .scaledToFit()
-            .clipShape(.circle)
-            .frame(width: size, height: size)
-        } else {
-          Circle()
-            .fill(.metal)
-            .frame(width: size, height: size)
-        }
+        PhotoView(
+          selectedPhoto: Binding(
+            get: { viewModel.contact?.photo },
+            set: { viewModel.contact?.photo = $0 }
+          )
+        )
         
         Text(viewModel.contact?.name ?? "")
           .padding(.top, .space4x)

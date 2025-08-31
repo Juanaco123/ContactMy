@@ -14,13 +14,6 @@ struct ContactPhotoView: View {
   
   private var initialImage: UIImage?
   
-  private var photo: UIImage? {
-    photoSelector.selectedImage ?? initialImage
-  }
-  
-  // MARK: - Constant
-  private let size: CGFloat = 142.0
-  
   init(selectedImage: Binding<UIImage?>, initialImage: UIImage? = nil) {
     self._selectedImage = selectedImage
     self.initialImage = initialImage
@@ -29,7 +22,10 @@ struct ContactPhotoView: View {
   var body: some View {
     ZStack(alignment: .bottomTrailing) {
       
-      photoView(photo)
+      PhotoView(
+        initialPhoto: initialImage,
+        selectedPhoto: $photoSelector.selectedImage
+      )
       
       PhotosPicker(
         selection: $photoSelector.imageStorage,
@@ -44,23 +40,8 @@ struct ContactPhotoView: View {
           }
       }
     }
-    .onChange(of: photo) { _, newValue in
+    .onChange(of: photoSelector.selectedImage) { _, newValue in
       selectedImage = newValue
-    }
-  }
-  
-  @ViewBuilder
-  private func photoView(_ uiPhoto: UIImage?) -> some View {
-    if let photo = uiPhoto {
-      Image(uiImage: photo)
-        .resizable()
-        .scaledToFill()
-        .clipShape(.circle)
-        .frame(width: size, height: size)
-    } else {
-      Circle()
-        .fill(.metal)
-        .frame(width: size, height: size)
     }
   }
 }

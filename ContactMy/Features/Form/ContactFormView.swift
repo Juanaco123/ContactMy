@@ -26,13 +26,12 @@ struct ContactFormView: SheetView {
       trailingText: isEditing ? Constants.EditContact.done.rawValue : Constants.AddContact.add.rawValue,
       trailingAction: {
         if isEditing {
-          // TODO: Add update contact function
           viewModel.updateContact()
           onUpdateContact()
-          dismiss()
+        } else {
+          viewModel.addContact()
+          onAddContact()
         }
-        viewModel.addContact()
-        onAddContact()
         dismiss()
       }
     )
