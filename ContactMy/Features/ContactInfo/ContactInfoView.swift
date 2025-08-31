@@ -23,8 +23,8 @@ struct ContactInfoView: SheetView {
   var sheetScreenConfiguration: SheetScreenConfiguration {
     SheetScreenConfiguration(
       fullSheet: true,
-      leadingText: Constants.ShowContactInfo.close.rawValue,
-      trailingText: Constants.ShowContactInfo.edit.rawValue,
+      leadingText: Constants.ShowContactInfo.close,
+      trailingText: Constants.ShowContactInfo.edit,
       trailingAction:  {
         showEditView.toggle()
       })
@@ -103,8 +103,8 @@ struct ContactInfoView: SheetView {
       .padding(.top, .space6x)
       
       VStack(spacing: .space4x) {
-        actionButton(Constants.ShowContactInfo.linkMessage.rawValue) { viewModel.textContact() }
-        actionButton(Constants.ShowContactInfo.linkCall.rawValue) { showNumberList.toggle() }
+        actionButton(Constants.ShowContactInfo.linkMessage) { viewModel.textContact() }
+        actionButton(Constants.ShowContactInfo.linkCall) { showNumberList.toggle() }
         
         ShareLink(
           item: viewModel.shareContact(),
@@ -114,13 +114,12 @@ struct ContactInfoView: SheetView {
               image: Image(uiImage: viewModel.contact?.photo ?? UIImage()))
         ) {
           HStack {
-            Text(Constants.ShowContactInfo.linkShare.rawValue)
+            Text(Constants.ShowContactInfo.linkShare)
               .foregroundStyle(.azure)
             
             Spacer()
           }
         }
-        actionButton(Constants.ShowContactInfo.linkFavorite.rawValue) {}
       }
       .padding(.vertical, .space2x)
       .padding(.leading, .space2x)

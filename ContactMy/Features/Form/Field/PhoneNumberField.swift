@@ -37,7 +37,7 @@ struct PhoneNumberField: View {
         TagSelectorView(tag: $tag)
         
         TextField(
-          Constants.AddContact.addNumberPlaceholder.rawValue,
+          Constants.AddContact.addNumberPlaceholder,
           text: $text
         )
       }

@@ -22,8 +22,8 @@ struct ContactFormView: SheetView {
   var sheetScreenConfiguration: SheetScreenConfiguration {
     SheetScreenConfiguration(
       fullSheet: false,
-      leadingText: Constants.AddContact.cancel.rawValue,
-      trailingText: isEditing ? Constants.EditContact.done.rawValue : Constants.AddContact.add.rawValue,
+      leadingText: Constants.AddContact.cancel,
+      trailingText: isEditing ? Constants.EditContact.done : Constants.AddContact.add,
       trailingAction: {
         if isEditing {
           viewModel.updateContact()
@@ -64,7 +64,7 @@ struct ContactFormView: SheetView {
         VStack {
           // Name
           HStack {
-            Text(Constants.AddContact.nameSubtitle.rawValue)
+            Text(Constants.AddContact.nameSubtitle)
             nameField
           }
           .padding(.bottom, .space1x)
@@ -74,7 +74,7 @@ struct ContactFormView: SheetView {
           
           // Phone
           HStack(alignment: .top) {
-            Text(Constants.AddContact.phoneSubtitle.rawValue)
+            Text(Constants.AddContact.phoneSubtitle)
             VStack(alignment: .leading) {
               ForEach($viewModel.phoneNumberFields) { $field in
                 PhoneNumberField(
@@ -90,7 +90,7 @@ struct ContactFormView: SheetView {
               } label: {
                 HStack {
                   CMIcon(.systemPlusCircle, color: .erin)
-                  Text(Constants.AddContact.buttonAddPhone.rawValue)
+                  Text(Constants.AddContact.buttonAddPhone)
                     .foregroundStyle(.azure)
                   Spacer()
                 }
@@ -127,7 +127,7 @@ struct ContactFormView: SheetView {
   @ViewBuilder
   private var nameField: some View {
     TextField(
-      Constants.AddContact.addNamePlaceholder.rawValue,
+      Constants.AddContact.addNamePlaceholder,
       text: isEditing
       ? Binding(
         get: { viewModel.contact?.name ?? "" },
@@ -146,7 +146,7 @@ struct ContactFormView: SheetView {
       action()
     } label: {
       VStack(alignment: .center) {
-        Text(Constants.EditContact.buttonLabel.rawValue)
+        Text(Constants.EditContact.buttonLabel)
           .foregroundStyle(Color.scarlet)
       }
       .padding(.vertical, .space3x)

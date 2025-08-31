@@ -20,24 +20,21 @@ struct HomeView: View {
   var body: some View {
     VStack {
       HStack {
-        Text(Constants.Home.title.rawValue)
+        Text(Constants.Home.title)
           .font(.title)
           .fontWeight(.medium)
+        
         Spacer()
-        Button {
+        
+        IconButton(icon: .systemAdd, withBackground: false) {
           showAddContact.toggle()
-        } label: {
-          CMIcon(
-            .systemAdd,
-            color: .azure
-          )
         }
       }
       .applyDefaultPadding()
       
       SearchContact(
         searchText: $viewModel.searchText,
-        label: Constants.Home.searchPlaceholder.rawValue
+        label: Constants.Home.searchPlaceholder
       )
       .padding(.horizontal, .space4x)
       

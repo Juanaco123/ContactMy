@@ -7,35 +7,34 @@
 
 import Foundation
 
-public enum Constants {
-  enum Home: String {
-    case title = "ContactMy"
-    case searchPlaceholder = "Search contact..."
+public class Constants {
+  class Home {
+    static let title = "ContactMy"
+    static let searchPlaceholder = "Search contact..."
   }
   
-  enum ShowContactInfo: String {
-    case close = "Close"
-    case edit = "Edit"
-    case linkMessage = "Send message"
-    case linkCall = "Call contact"
-    case linkShare = "Share contact"
-    case linkFavorite = "Add to favorites"
+  class ShowContactInfo {
+    static let close = "Close"
+    static let edit = "Edit"
+    static let linkMessage = "Send message"
+    static let linkCall = "Call contact"
+    static let linkShare = "Share contact"
   }
   
-  enum AddContact: String {
-    case cancel = "Cancel"
-    case add = "Add"
-    case addNamePlaceholder = "Add a name here..."
-    case addNumberPlaceholder = "Add a number here..."
-    case nameSubtitle = "Name"
-    case phoneSubtitle = "Phone"
-    case buttonAddPhone = "Add phone"
+  class AddContact {
+    static let cancel = "Cancel"
+    static let add = "Add"
+    static let addNamePlaceholder = "Add a name here..."
+    static let addNumberPlaceholder = "Add a number here..."
+    static let nameSubtitle = "Name"
+    static let phoneSubtitle = "Phone"
+    static let buttonAddPhone = "Add phone"
   }
   
-  enum EditContact: String {
-    case cancel = "Cancel"
-    case done = "Done"
-    case buttonLabel = "Delete contact"
-    case buttonAddPhone = "Add phone"
+  class EditContact {
+    static let cancel = "Cancel"
+    static let done = "Done"
+    static let buttonLabel = "Delete contact"
+    static let buttonAddPhone = "Add phone"
   }
 }
