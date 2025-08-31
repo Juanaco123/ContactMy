@@ -13,6 +13,7 @@ struct ContactInfoView: SheetView {
   @State private var showNumberList: Bool = false
   @State private var showEditView: Bool = false
   
+  var onUpdateContact: () -> Void = {}
   var onDeleteContact: () -> Void = {}
   
   private let contact: ContactModel?
@@ -29,9 +30,14 @@ struct ContactInfoView: SheetView {
       })
   }
   
-  init(_ contact: ContactModel, onDeleteContact: @escaping () -> Void = {}) {
+  init(
+    _ contact: ContactModel,
+    onUpdateContact: @escaping () -> Void = {},
+    onDeleteContact: @escaping () -> Void = {},
+  ) {
     self.contact = contact
     self.onDeleteContact = onDeleteContact
+    self.onUpdateContact = onUpdateContact
     _viewModel = State(initialValue: ContactInfoViewModel(contact))
   }
   
@@ -138,6 +144,10 @@ struct ContactInfoView: SheetView {
       ContactFormView(
         contact: viewModel.contact,
         isEditing: true,
+        onUpdateContact: {
+          onUpdateContact()
+          dismiss()
+        },
         onDeleteContact: {
           onDeleteContact()
           dismiss()
@@ -242,7 +252,8 @@ struct ContactInfoView: SheetView {
   ContactInfoView(
     ContactModel(
       name: "Juan Camilo Victoria",
-      phoneNumber: phones
+      phoneNumber: phones,
+      photo: UIImage(systemName: "phone")
     )
   )
 }

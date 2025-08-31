@@ -16,6 +16,7 @@ struct ContactFormView: SheetView {
   private let size: CGFloat = 142.0
   
   var onAddContact: () -> Void
+  var onUpdateContact: () -> Void = {}
   var onDeleteContact: () -> Void = {}
   
   var sheetScreenConfiguration: SheetScreenConfiguration {
@@ -26,6 +27,8 @@ struct ContactFormView: SheetView {
       trailingAction: {
         if isEditing {
           // TODO: Add update contact function
+          viewModel.updateContact()
+          onUpdateContact()
           dismiss()
         }
         viewModel.addContact()
@@ -39,26 +42,23 @@ struct ContactFormView: SheetView {
     contact: ContactModel? = nil,
     isEditing: Bool = false,
     onAddContact: @escaping () -> Void = {},
+    onUpdateContact: @escaping () -> Void = {},
     onDeleteContact: @escaping () -> Void = {},
   ) {
     self.isEditing = isEditing
     self.onAddContact = onAddContact
     _viewModel = State(initialValue: ContactFormViewModel(contact))
+    self.onUpdateContact = onUpdateContact
     self.onDeleteContact = onDeleteContact
   }
   
   var content: some View {
     VStack {
       // Photo
-      if isEditing {
-        Image(uiImage: viewModel.contact?.photo ?? UIImage())
-          .resizable()
-          .scaledToFit()
-          .clipShape(.circle)
-          .frame(width: size, height: size)
-      } else {
-        ContactPhotoView(selectedImage: $viewModel.selectedPhoto)
-      }
+      ContactPhotoView(
+        selectedImage: $viewModel.selectedPhoto,
+        initialImage: isEditing || viewModel.selectedPhoto == nil ? viewModel.contact?.photo : nil
+      )
       
       VStack(alignment: .leading) {
         

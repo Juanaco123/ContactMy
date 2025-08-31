@@ -51,6 +51,13 @@ class ContactFormViewModel {
     service.createContact(newContact)
   }
   
+  func updateContact() {
+    guard var contact = contact else { return }
+    let phoneNumbers: [PhoneNumberModel] = addPhoneNumber()
+    contact.phoneNumber = phoneNumbers
+    service.updateContact(contact)
+  }
+  
   func deleteContact() {
     guard let contact = contact else { return }
     service.deleteContact(contact)

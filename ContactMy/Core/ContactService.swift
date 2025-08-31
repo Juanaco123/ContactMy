@@ -89,6 +89,34 @@ struct ContactService {
     saveContext()
   }
   
+  func updateContact(_ contactModel: ContactModel) {
+    let request: NSFetchRequest<Contact> = Contact.fetchRequest()
+    request.predicate = NSPredicate(format: "id == %@", contactModel.id as CVarArg)
+    do {
+      if let contact = try context.fetch(request).first {
+        contact.name = contactModel.name
+        contact.photo = contactModel.photo?.jpegData(compressionQuality: 0.7)
+        
+        if let existingNumbers = contact.phoneNumber as? Set<PhoneNumber> {
+          for number in existingNumbers {
+            context.delete(number)
+          }
+        }
+        
+        for phoneNumber in contactModel.phoneNumber {
+          let updatedNumber = PhoneNumber(context: context)
+          updatedNumber.id = phoneNumber.id
+          updatedNumber.tag = phoneNumber.tag
+          updatedNumber.number = phoneNumber.number
+          contact.addToPhoneNumber(updatedNumber)
+        }
+      }
+      saveContext()
+    } catch {
+      print("Failed, contact could not be updated: \(error)")
+    }
+  }
+  
   func deleteContact(_ contactModel: ContactModel) {
     let request: NSFetchRequest<Contact> = Contact.fetchRequest()
     request.predicate = NSPredicate(format: "id == %@", contactModel.id as CVarArg)
